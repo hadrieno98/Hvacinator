@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Hadrien Ovize/Documents/GitHub/Hvacinator/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Users/Hadrien Ovize/Documents/GitHub/Hvacinator/app/src/main/res/layout/activity_signup.xml" value="0.1" />
         <entry key="..\:/Users/Malek/AndroidStudioProjects/Hvacinator/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
         <entry key="..\:/Users/Malek/AndroidStudioProjects/Hvacinator/app/src/main/res/layout/activity_unit_view.xml" value="0.23278985507246377" />
         <entry key="..\:/Users/Malek/AndroidStudioProjects/Hvacinator/app/src/main/res/layout/add_unit_dialog.xml" value="0.23278985507246377" />

@@ -10,9 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Hvacinator">
         <activity
-            android:name=".UnitViewActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".Signup"
             android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="false" />
+        <activity
+            android:name=".UnitViewActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
