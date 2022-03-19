@@ -1,5 +1,6 @@
 package com.coen390.hvacinator;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -44,16 +45,6 @@ public class MainActivity extends AppCompatActivity implements AddUnitDialog.Add
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         units = new ArrayList<Unit>();
-        // Temporary for the sake of testing
-        mAuth.signInWithEmailAndPassword(EMAIL_ADDRESS, PASSWORD).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    reloadUser(mAuth.getCurrentUser().getUid());
-                }
-            }
-        });
         FloatingActionButton insertProfileDialogButton = findViewById(R.id.AddUnitButton);
         insertProfileDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,5 +142,11 @@ public class MainActivity extends AppCompatActivity implements AddUnitDialog.Add
         }
         unitListAdapter = new UnitListAdapter(this, units);
         unitList.setAdapter(unitListAdapter);
+    }
+
+    public void logout(View view) { //Log out function called by onclick of logout button
+        mAuth.signOut();
+        Intent s = new Intent(getApplicationContext(), Login.class);
+        startActivity(s);
     }
 }
