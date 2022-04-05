@@ -3,6 +3,7 @@ package com.coen390.hvacinator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -17,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,6 +30,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements AddUnitDialog.AddUnitDialogListener {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private FirebaseDatabase rdb;
 
     private final String EMAIL_ADDRESS = "malekihd0@gmail.com";
     private final String PASSWORD = "hvacinator123";
@@ -66,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements AddUnitDialog.Add
     @Override
     protected void onStart() {
         super.onStart();
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        reloadUser(mAuth.getCurrentUser().getUid());
+        FirebaseUser user = mAuth.getCurrentUser();
+        reloadUser(mAuth.getCurrentUser().getUid());
     }
 
     @Override
@@ -101,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements AddUnitDialog.Add
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         ArrayList<String> unitIDs = (ArrayList<String>) document.get("unitIDs");
-                        System.out.println(unitIDs);
                         reloadUnits(unitIDs);
                     } else {
                         Map<String, Object> newUser = new HashMap<>();
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements AddUnitDialog.Add
     }
 
     private void reloadUnits(ArrayList<String> unitIDs) {
+        System.out.println("reloadUnits");
         reloadUnits_getTasksFinished = unitIDs.size();
         units.clear();
         for(String unitID: unitIDs) {
@@ -125,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements AddUnitDialog.Add
                         if (document.exists()) {
                             units.add(new Unit(document.getData()));
                             reloadUnits_getTasksFinished -= 1;
+                            System.out.println((new Unit(document.getData())).ID);
                             if(reloadUnits_getTasksFinished == 0) {
                                 reloadUI();
                             }
@@ -137,16 +141,25 @@ public class MainActivity extends AppCompatActivity implements AddUnitDialog.Add
 
     private void reloadUI() {
         ArrayList<String> unitIDs = new ArrayList<String>();
+        System.out.println(units);
         for(Unit unit : units) {
             unitIDs.add(unit.ID);
         }
         unitListAdapter = new UnitListAdapter(this, units);
         unitList.setAdapter(unitListAdapter);
+        unitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(MainActivity.this, UnitViewActivity.class);
+                intent.putExtra("ID", units.get(i).ID);
+                startActivity(intent);
+            }
+        });
     }
 
     public void logout(View view) { //Log out function called by onclick of logout button
         mAuth.signOut();
-        Intent s = new Intent(getApplicationContext(), Login.class);
+        Intent s = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(s);
     }
 }
